@@ -495,37 +495,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Find matching variant
-    let matchingVariant = null;
+    const matchingVariant = variants.find(variant => {
+      const options = [variant.option1, variant.option2, variant.option3];
 
-    for (const variant of variants) {
-      let colorMatch = !selectedColor || variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
-      let sizeMatch = !selectedSize || variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize;
+      const hasColor = !selectedColor || options.includes(selectedColor);
+      const hasSize = !selectedSize || options.includes(selectedSize);
 
+      if (!hasColor || !hasSize) return false;
+
+      // If both selected, ensure they're different options
       if (selectedColor && selectedSize) {
-        // Both selected - need exact match
-        if ((variant.option1 === selectedColor && variant.option2 === selectedSize) ||
-            (variant.option1 === selectedSize && variant.option2 === selectedColor) ||
-            (variant.option2 === selectedColor && variant.option3 === selectedSize) ||
-            (variant.option2 === selectedSize && variant.option3 === selectedColor) ||
-            (variant.option1 === selectedColor && variant.option3 === selectedSize) ||
-            (variant.option1 === selectedSize && variant.option3 === selectedColor)) {
-          matchingVariant = variant;
-          break;
-        }
-      } else if (selectedColor) {
-        // Only color selected
-        if (variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor) {
-          matchingVariant = variant;
-          break;
-        }
-      } else if (selectedSize) {
-        // Only size selected
-        if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
-          matchingVariant = variant;
-          break;
-        }
+        const colorIndex = options.indexOf(selectedColor);
+        const sizeIndex = options.indexOf(selectedSize);
+        return colorIndex !== sizeIndex;
       }
-    }
+
+      return true;
+    });
 
     if (matchingVariant) {
       addToCartBtn.dataset.variantId = matchingVariant.id;
