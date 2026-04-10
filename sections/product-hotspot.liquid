@@ -292,32 +292,73 @@ letter-spacing: -0.36px;
           <div class="hotspot-popup-bottom">
               <div class="hotspot-popup-bottom-space">
              <!-- Color -->
-            <div class="variants-part variants-part-color">
-            <label class="variants-label">Color</label>
-            <div class="color-group" id="colorGroup">
-            <div class="color-option"><div class="color-option-bg" style="background:#0D499F">&nbsp;</div><span>blue</span></div>
-            <div class="color-option"><div class="color-option-bg" style="background:#B20F36">&nbsp;</div><span>Red</span></div>
-            </div>
+            <div class="variants-part variants-part-color" data-option-index="0">
+              <label class="variants-label">Color</label>
+              <div class="color-group">
+                {% assign color_option_index = -1 %}
+                {% for option in product.options_with_values %}
+                  {% if option.name == 'Color' %}
+                    {% assign color_option_index = forloop.index0 %}
+                    {% for value in option.values %}
+                      {% if value.swatch != blank %}
+                        {% assign color_code = value.swatch.color | default: value | handleize | prepend: '#' %}
+                      {% else %}  
+                        {% assign color_code = value | handleize %}
+                      {% endif %}
+                      <div class="color-option{% if forloop.first %} active{% endif %}" data-value="{{ value | escape }}" data-color="{{ color_code }}">
+                        <div class="color-option-bg" style="background:{{ color_code }}">&nbsp;</div>
+                        <span>{{ value }}</span>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+                {% if color_option_index == -1 %}
+                  <div class="color-option active" data-value="default">
+                    <div class="color-option-bg" style="background:#000000">&nbsp;</div>
+                    <span>Default</span>
+                  </div>
+                {% endif %}
+              </div>
             </div>
 
           <!-- SIZE -->
-          <div class="variants-part variants-part-size">
+          <div class="variants-part variants-part-size" data-option-index="1">
             <label class="variants-label">Size</label>
-            <div class="dropdown" >
+            <div class="dropdown">
               <div class="dropdown-header">
-                <span class="selectedSize">Choose your size</span>
+                {% assign size_option_index = -1 %}
+                {% assign has_size = false %}
+                {% for option in product.options_with_values %}
+                  {% if option.name == 'Size' %}
+                    {% assign has_size = true %}
+                    {% assign size_option_index = forloop.index0 %}
+                    <span class="selectedSize" data-value="{{ option.values.first | escape }}">{{ option.values.first }}</span>
+                  {% endif %}
+                {% endfor %}
+                {% unless has_size %}
+                  <span class="selectedSize" data-value="default">Default</span>
+                {% endunless %}
                 <span class="dropdown-arrow">{% render 'arrow-down-icon' %}</span>
               </div>
-              <div class="dropdown-list">
-                <div class="dropdown-item">XS</div>
-                <div class="dropdown-item">S</div>
-                <div class="dropdown-item">M</div>
-                <div class="dropdown-item">L</div>
-              </div>
+              {% if has_size %}
+                <div class="dropdown-list">
+                  {% for option in product.options_with_values %}
+                    {% if option.name == 'Size' %}
+                      {% for value in option.values %}
+                        <div class="dropdown-item{% if forloop.first %} selected{% endif %}" data-value="{{ value | escape }}">{{ value }}</div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
           </div>
           </div>
-           {% if section.settings.btn_text != blank %} <button class="btn-custom"> <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span></button> {% endif %}
+           {% if section.settings.btn_text != blank %}
+             <button class="btn-custom add-to-cart-btn" data-product-id="{{ product.id }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+               <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span>
+             </button>
+           {% endif %}
           </div>
 
          </div>
@@ -327,84 +368,213 @@ letter-spacing: -0.36px;
       {% endfor %}
     </div>
 
- 
 
   </div>
 </section>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  // Product variants data for each hotspot
+  const productVariants = {};
 
   document.querySelectorAll(".hotspot-wrapper-item").forEach(function(item) {
-
     const point = item.querySelector(".hotspot-point");
     const popup = item.querySelector(".hotspot-popup");
     const closeBtn = item.querySelector(".close-btn");
+    const addToCartBtn = item.querySelector(".add-to-cart-btn");
+    const productData = point.dataset.product;
 
-    // 👉 Open popup
+    let variants = [];
+    if (productData) {
+      try {
+        const product = JSON.parse(productData);
+        variants = product.variants || [];
+        if (addToCartBtn && product.variants && product.variants.length > 0) {
+          productVariants[item.dataset.productId || product.id] = product.variants;
+        }
+      } catch (e) {
+        console.error('Error parsing product data:', e);
+      }
+    }
+
+    // Open popup
     point.addEventListener("click", function() {
       popup.classList.add("open_popup");
     });
 
-    // 👉 Close popup
+    // Close popup
     closeBtn.addEventListener("click", function() {
       popup.classList.remove("open_popup");
     });
 
-  });
+    // COLOR SELECT - scoped to this item
+    const colorGroup = item.querySelector(".variants-part-color .color-group");
+    if (colorGroup) {
+      const colorOptions = colorGroup.querySelectorAll(".color-option");
+      colorOptions.forEach(option => {
+        option.addEventListener("click", () => {
+          colorOptions.forEach(o => o.classList.remove("active"));
+          option.classList.add("active");
+          updateVariantId(item, addToCartBtn, variants);
+        });
+      });
+    }
 
-});
+    // SIZE DROPDOWN - scoped to this item
+    const sizeDropdown = item.querySelector(".variants-part-size .dropdown");
+    if (sizeDropdown) {
+      const header = sizeDropdown.querySelector(".dropdown-header");
+      const list = sizeDropdown.querySelector(".dropdown-list");
+      const items = sizeDropdown.querySelectorAll(".dropdown-item");
+      const selected = sizeDropdown.querySelector(".selectedSize");
 
+      if (header && list) {
+        header.addEventListener("click", (e) => {
+          e.stopPropagation();
+          list.classList.toggle("open");
+          header.classList.toggle("active");
+        });
 
-// COLOR SELECT
-  const colorOptions = document.querySelectorAll(".color-option");
+        items.forEach(dropdownItem => {
+          dropdownItem.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selected.textContent = dropdownItem.textContent;
+            selected.dataset.value = dropdownItem.dataset.value;
+            list.classList.remove("open");
+            header.classList.remove("active");
+            items.forEach(i => i.classList.remove("selected"));
+            dropdownItem.classList.add("selected");
+            updateVariantId(item, addToCartBtn, variants);
+          });
+        });
 
-  colorOptions.forEach(option => {
-    option.addEventListener("click", () => {
-      colorOptions.forEach(o => o.classList.remove("active"));
-      option.classList.add("active");
-    });
-  });
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (!sizeDropdown.contains(e.target)) {
+            list.classList.remove("open");
+            header.classList.remove("active");
+          }
+        });
+      }
+    }
 
-  // DROPDOWN
-
-const dropdowns = document.querySelectorAll(".dropdown");
-
-dropdowns.forEach(dropdown => {
-  const header = dropdown.querySelector(".dropdown-header");
-  const list = dropdown.querySelector(".dropdown-list");
-  const items = dropdown.querySelectorAll(".dropdown-item");
- const selected = dropdown.querySelector(".selectedSize");
-
-  header.addEventListener("click", () => {
-    list.classList.toggle("open");
-    header.classList.toggle("active"); 
-  });
-
-  items.forEach(item => {
-    item.addEventListener("click", () => {
-      selected.textContent = item.textContent;
-      list.classList.remove("open");
-        header.classList.remove("active"); 
-    });
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!dropdown.contains(e.target)) {
-      list.classList.remove("open");
-      header.classList.remove("active")
+    // Add to cart functionality
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        const variantId = this.dataset.variantId;
+        if (variantId) {
+          addToCart(variantId, this);
+        }
+      });
     }
   });
+
+  // Function to update variant ID based on selected color and size
+  function updateVariantId(item, addToCartBtn, variants) {
+    if (!addToCartBtn || !variants || variants.length === 0) return;
+
+    const colorPart = item.querySelector(".variants-part-color");
+    const sizePart = item.querySelector(".variants-part-size");
+
+    let selectedColor = null;
+    let selectedSize = null;
+
+    if (colorPart) {
+      const activeColor = colorPart.querySelector(".color-option.active");
+      if (activeColor) {
+        selectedColor = activeColor.dataset.value;
+      }
+    }
+
+    if (sizePart) {
+      const selectedSizeEl = sizePart.querySelector(".selectedSize");
+      if (selectedSizeEl) {
+        selectedSize = selectedSizeEl.dataset.value;
+      }
+    }
+
+    // Find matching variant
+    let matchingVariant = null;
+
+    for (const variant of variants) {
+      let colorMatch = !selectedColor || variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor;
+      let sizeMatch = !selectedSize || variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize;
+
+      if (selectedColor && selectedSize) {
+        // Both selected - need exact match
+        if ((variant.option1 === selectedColor && variant.option2 === selectedSize) ||
+            (variant.option1 === selectedSize && variant.option2 === selectedColor) ||
+            (variant.option2 === selectedColor && variant.option3 === selectedSize) ||
+            (variant.option2 === selectedSize && variant.option3 === selectedColor) ||
+            (variant.option1 === selectedColor && variant.option3 === selectedSize) ||
+            (variant.option1 === selectedSize && variant.option3 === selectedColor)) {
+          matchingVariant = variant;
+          break;
+        }
+      } else if (selectedColor) {
+        // Only color selected
+        if (variant.option1 === selectedColor || variant.option2 === selectedColor || variant.option3 === selectedColor) {
+          matchingVariant = variant;
+          break;
+        }
+      } else if (selectedSize) {
+        // Only size selected
+        if (variant.option1 === selectedSize || variant.option2 === selectedSize || variant.option3 === selectedSize) {
+          matchingVariant = variant;
+          break;
+        }
+      }
+    }
+
+    if (matchingVariant) {
+      addToCartBtn.dataset.variantId = matchingVariant.id;
+    }
+  }
+
+  // Add to cart function using Shopify Cart API
+  function addToCart(variantId, button) {
+    const originalText = button.innerHTML;
+    button.innerHTML = '<span>Adding...</span>';
+    button.disabled = true;
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: 1
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      button.innerHTML = '<span>Added!</span>';
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }, 1500);
+
+      // Dispatch custom event for other cart handlers
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+      button.innerHTML = '<span>Error</span>';
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }, 1500);
+    });
+  }
 });
-
-
-  </script>
-
+</script>
 
 {% schema %}
 {
   "name": "Product Hotspot",
-    "tag": "section",
+  "tag": "section",
   "class": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
