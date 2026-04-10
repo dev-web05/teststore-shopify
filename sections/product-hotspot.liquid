@@ -295,6 +295,13 @@ letter-spacing: -0.36px;
             <div class="variants-part variants-part-color">
             <label class="variants-label">Color</label>
             <div class="color-group" id="colorGroup">
+               {% for option in product.options_with_values %}
+                  {% if option.name == 'Color' %}
+                    {% for value in option.values %}
+                      {{ value.swatch.color }}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
             <div class="color-option"><div class="color-option-bg" style="background:#0D499F">&nbsp;</div><span>blue</span></div>
             <div class="color-option"><div class="color-option-bg" style="background:#B20F36">&nbsp;</div><span>Red</span></div>
             </div>
