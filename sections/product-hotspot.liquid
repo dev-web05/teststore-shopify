@@ -298,7 +298,7 @@ letter-spacing: -0.36px;
                {% for option in product.options_with_values %}
                   {% if option.name == 'Color' %}
                     {% for value in option.values %}
-                      {{ value.swatch.color }}
+                      {{ value.swatch.color }} --13456
                     {% endfor %}
                   {% endif %}
                 {% endfor %}
