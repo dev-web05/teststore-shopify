@@ -1,0 +1,264 @@
+<section class="section-{{ section.id }}-padding gift-guide" style="background-color: {{ section.settings.bg_color }};">
+  <div class="gift-guide-wrapper">
+     <div class="page-width m-hide">
+         <div class="banner-mobile-inner center">
+      <h2  style="color: {{ section.settings.heading_color }}">
+         {{ section.settings.heading }}
+      </h2>
+
+      <div  style="color: {{ section.settings.text_color }}" class="content">
+        {{ section.settings.text_m }}
+      </div>
+        </div>
+        </div>
+    <!-- Image -->
+    <div class="gift-guide-image">
+   {% if section.settings.desktop_image != blank %}
+    <img 
+      class="desktop-img"
+      src="{{ section.settings.desktop_image | img_url:'master' }}" 
+      alt="desktop image">
+  {% endif %}
+
+  {% if section.settings.mobile_image != blank %}
+    <img 
+      class="mobile-img"
+      src="{{ section.settings.mobile_image | img_url:'master' }}" 
+      alt="mobile image">
+  {% endif %}
+    </div>
+
+    <!-- Content -->
+    <div class="banner-content-main">
+        <div class="page-width">
+              <div class="banner-content-inner">
+      {% if section.settings.heading != blank %}          
+      <h2 class="d-hide " style="color: {{ section.settings.heading_color }}">
+         {{ section.settings.heading }}
+      </h2>
+     {% endif %}
+      {% if section.settings.text != blank %}
+      <div class="d-hide content" style="color: {{ section.settings.text_color }}" class="content">
+        {{ section.settings.text }}
+      </div>
+      {% endif %}
+
+      {% if section.settings.btn_text != blank %}
+       <!-- Button -->
+  <a href="{{ section.settings.btn_link }}" class="btn-custom">
+    <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span>
+  </a>
+      {% endif %}
+    </div>
+        </div>
+       </div>
+
+  </div>
+
+    {% if section.settings.bottom_text != blank %} 
+      <div class="banner-bottom-part center" style="background:{{ section.settings.bottom_bg }}; color:{{ section.settings.bottom_text_color }};"> 
+       <span class="d-hide"> {{ section.settings.bottom_text }}</span>
+       <span class="m-hide"> {{ section.settings.bottom_text_m }}</span>
+
+      </div>   {% endif %}
+
+</section>
+
+<style>
+
+.section-{{ section.id }}-padding .gift-guide-wrapper {  position: relative;}
+.section-{{ section.id }}-padding .gift-guide-image img {  width: 100%;}
+.section-{{ section.id }}-padding .banner-content-main {left:0; right:0;    position: absolute;    bottom: 100px;}
+.section-{{ section.id }}-padding .banner-content-inner {    max-width: 500px;}
+.section-{{ section.id }}-padding .banner-content-main h2{font-size:7rem; font-weight:500; margin:0; padding:0;     line-height: 1;}
+.section-{{ section.id }}-padding .banner-content-main .content{font-size:20px;     padding: 35px 0 32px;} 
+.section-{{ section.id }}-padding .banner-content-main .content p{margin:0; padding:0;}
+
+/* Button */
+.section-{{ section.id }}-padding .btn-custom {
+  position: relative;
+  overflow: hidden;
+  padding: 11px 32px;
+  background: {{ section.settings.btn_color }};
+  text-decoration: none;
+  color: {{ section.settings.btn_text_color  }};
+  font-weight: 400;
+  display: inline-block;
+  transition: color 0.3s ease;     min-width: 220px;
+}
+
+.section-{{ section.id }}-padding .btn-custom::before {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: {{ section.settings.btn_hover_color }};
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.section-{{ section.id }}-padding .btn-custom:hover::before {  left: 0;}
+.section-{{ section.id }}-padding .btn-custom span {  position: relative;  z-index: 1;  display: flex;    align-items: center;    gap: 10px;    justify-content: center;}
+.section-{{ section.id }}-padding .btn-custom:hover {  color: {{ section.settings.btn_text_color_h }}; box-shadow: 0px 2px 4px 0px #00000033;}
+.section-{{ section.id }}-padding .btn-custom path{fill: {{ section.settings.btn_text_color  }};}
+.section-{{ section.id }}-padding .btn-custom:hover path{ fill: {{ section.settings.btn_text_color_h  }};}
+.section-{{ section.id }}-padding .banner-mobile-inner h2{font-size:30px; font-weight:500; margin:0; padding:0;     line-height: 1;}
+.section-{{ section.id }}-padding .banner-mobile-inner {    padding: 40px 0 20px;}
+.section-{{ section.id }}-padding .banner-bottom-part{padding:6px 10px; line-height: normal;}
+
+@media(max-width:1291px) {
+    .section-{{ section.id }}-padding .banner-content-main {    bottom: 50px;}
+    .section-{{ section.id }}-padding .banner-content-main h2{font-size:40px; }
+    .section-{{ section.id }}-padding .banner-content-inner {    max-width: 400px;}
+    .section-{{ section.id }}-padding .banner-content-main .content {font-size:18px; padding:25px 0;}
+}
+
+@media(max-width:1100px) {
+  .section-{{ section.id }}-padding .banner-content-main {    bottom: 20px;}
+}
+
+/* 📱 Mobile Layout */
+@media(min-width: 769px) {
+.section-{{ section.id }}-padding .mobile-img{display:none;}
+ .section-{{ section.id }}-padding .m-hide{display:none;}
+}
+
+@media(max-width: 768px) {
+  .section-{{ section.id }}-padding .desktop-img{display:none;}  
+  .section-{{ section.id }}-padding .d-hide{display:none;}
+  .section-{{ section.id }}-padding .banner-content-inner {    max-width: 100%;}
+  .section-{{ section.id }}-padding .banner-content-main{text-align:center; bottom:40px;}
+  .section-{{ section.id }}-padding .btn-custom {    min-width:193px; padding: 8px 32px;}
+  .section-{{ section.id }}-padding .banner-bottom-part{font-size:14px; padding:7px 10px; }
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Banner custom",
+    "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+   {
+  "type": "image_picker",
+  "id": "desktop_image",
+  "label": "Desktop Image"
+},
+{
+  "type": "image_picker",
+  "id": "mobile_image",
+  "label": "Mobile Image"
+},
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description"
+    },
+    {
+      "type": "richtext",
+      "id": "text_m",
+      "label": "Description Mobile"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "CHOOSE GIFT"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button Background",
+      "default": "#f4e933"
+    },
+       {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Hover Effect"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color_h",
+      "label": "Button Text Color",
+      "default": "#000"
+    },
+      {
+      "type": "header",
+      "content": "Banner Bottom Part"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "bottom_text",
+      "label": "Desktop Text"
+    },
+     {
+      "type": "inline_richtext",
+      "id": "bottom_text_m",
+      "label": "Mobile Text"
+    },
+     {
+      "type": "color",
+      "id": "bottom_bg",
+      "label": "Background",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "bottom_text_color",
+      "label": "Color",
+      "default": "#000"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Banner custom"
+    }
+  ]
+}
+{% endschema %}

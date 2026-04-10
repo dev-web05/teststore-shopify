@@ -1,0 +1,254 @@
+
+
+<style>
+.custom-header {
+  background: {{ section.settings.bg_color }};
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.desktop-header{  display: flex;  align-items: center; justify-content: space-between;  }
+
+.custom-header__logo img {
+  width: {{ section.settings.logo_width_desktop }}px;
+  height: auto;     display: block;
+}
+
+@media(max-width: 768px) {
+  .custom-header__logo img {
+    width: {{ section.settings.logo_width_mobile }}px;
+  }
+}
+.custom-header__center {
+  text-align: center;
+  flex: 1;
+  font-size: 16px;
+}
+
+.custom-header__btn {
+  position: relative;
+  overflow: hidden;
+  padding: 8px 32px;
+  background: {{ section.settings.btn_color }};
+  text-decoration: none;
+  color: #000;
+  font-weight: 400;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.custom-header__btn::before {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: {{ section.settings.btn_hover_color }};
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.custom-header__btn:hover::before {
+  left: 0;
+}
+
+.custom-header__btn span {
+  position: relative;
+  z-index: 1;
+  display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.custom-header__btn:hover {
+  color: #fff; box-shadow: 0px 2px 4px 0px #00000033;
+
+}
+.custom-header__btn:hover path{ fill: #fff;}
+/* Mobile */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-toggle, .mobile-right {
+    width: 35px; line-height: normal;
+}
+
+/* Default state */
+.mobile-menu-toggle .icon-close {
+  display: none;
+}
+
+/* When active */
+.m_drawer_active  .icon-hamburger {
+  display: none;
+}
+
+.m_drawer_active .icon-close {
+  display: inline-block;
+}
+
+.m_drawer_active .mobile-drawer{display:block;}
+@media(min-width:769px) {
+.mobile-header, .mobile-drawer{display:none;}
+
+}
+
+@media(max-width: 768px) {
+.desktop-header{display:none;}
+.mobile-header { display: flex;  align-items:center; justify-content: space-between; padding:18px 20px;}
+.m_drawer_active .mobile-header{box-shadow: 0px 2px 4px 0px #00000026;}
+.custom-header {  position: relative;}
+.custom-header__center{padding:0 0 8px}
+.custom-header__btn {    min-width: 244px;}
+.mobile-drawer{display:none; padding:15px 20px; text-align:center; background:#F2F2F2; position: absolute;     width: 100%;    left: 0;    right: 0;    top: 100%;}
+
+}
+</style>
+
+<div class="custom-header ">
+<div class="page-width" >
+    
+  <!-- Toggle -->
+
+<div class="desktop-header">
+  <!-- Logo -->
+  <div class="custom-header__logo">
+    {% if section.settings.logo %}
+      <img src="{{ section.settings.logo | image_url }}" alt="logo">
+    {% endif %}
+  </div>
+
+  <!-- Center Text -->
+  <div class="custom-header__center">
+    {{ section.settings.center_text }}
+  </div>
+
+  <!-- Button -->
+      {% if section.settings.btn_text != blank %}
+  <a href="{{ section.settings.btn_link }}" class="custom-header__btn">
+    <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span>
+  </a>
+{% endif %}
+</div>
+</div>
+
+<div class="mobile-header">
+    <div class="mobile-menu-toggle"> {% render 'hamburger' %} {% render 'hamburger-close' %}</div>
+      <div class="custom-header__logo">
+    {% if section.settings.logo %}
+      <img src="{{ section.settings.logo | image_url }}" alt="logo">
+    {% endif %}
+  </div>
+    <div class="mobile-right">&nbsp;</div> 
+</div>
+
+<div class="mobile-drawer">
+    <!-- Center Text -->
+  <div class="custom-header__center">
+    {{ section.settings.center_text }}
+  </div>
+
+  <!-- Button -->
+    {% if section.settings.btn_text != blank %}
+  <a href="{{ section.settings.btn_link }}" class="custom-header__btn">
+    <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span>
+  </a>
+{% endif %}
+</div>
+
+
+
+
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const toggle = document.querySelector(".mobile-menu-toggle");
+  const header = document.querySelector(".custom-header");
+
+  toggle.addEventListener("click", function () {
+    header.classList.toggle("m_drawer_active");
+  });
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Custom Header",
+    "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+  "type": "range",
+  "id": "logo_width_desktop",
+  "label": "Logo Width (Desktop)",
+  "min": 50,
+  "max": 300,
+  "step": 5,
+  "default": 150
+    },
+    {
+    "type": "range",
+    "id": "logo_width_mobile",
+    "label": "Logo Width (Mobile)",
+    "min": 40,
+    "max": 200,
+    "step": 5,
+    "default": 120
+    },
+    {
+      "type": "text",
+      "id": "center_text",
+      "label": "Center Text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "CHOOSE GIFT"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button Color",
+      "default": "#f4e933"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_color",
+      "label": "Button Hover Color",
+      "default": "#000000"
+    }
+  ],
+    "presets": [
+    {
+      "name": "Custom Header"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,124 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner_custom_V4KiYT": {
+      "type": "banner-custom",
+      "name": "Banner custom",
+      "settings": {
+        "desktop_image": "shopify://shop_images/Group_1000008197.png",
+        "mobile_image": "shopify://shop_images/Frame.png",
+        "heading": "The Gift Guide",
+        "text": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
+        "text_m": "<p>Discover Joy: Your Ultimate Holiday Gift Destination.</p>",
+        "bg_color": "#ffffff",
+        "heading_color": "#000000",
+        "text_color": "#333333",
+        "btn_text": "SHOP NOWd",
+        "btn_link": "",
+        "btn_color": "#000000",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#fff544",
+        "btn_text_color_h": "#000000",
+        "bottom_text": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL",
+        "bottom_text_m": "SUSTAINABLE, ETHICALLY MADE ACTIVEWEAR",
+        "bottom_bg": "#f5f5f5",
+        "bottom_text_color": "#000000"
+      }
+    },
+    "product_hotspot_UhgLmX": {
+      "type": "product-hotspot",
+      "blocks": {
+        "hotspot_F7kMzD": {
+          "type": "hotspot",
+          "settings": {
+            "product": "orange-wide-leg",
+            "top": 58,
+            "left": 64,
+            "top_m": 16,
+            "left_m": 70
+          }
+        },
+        "hotspot_EwaRDR": {
+          "type": "hotspot",
+          "settings": {
+            "product": "tailored-jacket",
+            "top": 50,
+            "left": 86,
+            "top_m": 10,
+            "left_m": 63
+          }
+        },
+        "hotspot_FWWk9L": {
+          "type": "hotspot",
+          "settings": {
+            "product": "orange-wide-leg",
+            "top": 58,
+            "left": 64,
+            "top_m": 16,
+            "left_m": 70
+          }
+        },
+        "hotspot_848Aed": {
+          "type": "hotspot",
+          "settings": {
+            "product": "tailored-jacket",
+            "top": 50,
+            "left": 86,
+            "top_m": 10,
+            "left_m": 63
+          }
+        },
+        "hotspot_gWJQ3i": {
+          "type": "hotspot",
+          "settings": {
+            "product": "orange-wide-leg",
+            "top": 58,
+            "left": 64,
+            "top_m": 16,
+            "left_m": 70
+          }
+        },
+        "hotspot_nqiBTF": {
+          "type": "hotspot",
+          "settings": {
+            "product": "tailored-jacket",
+            "top": 50,
+            "left": 86,
+            "top_m": 10,
+            "left_m": 63
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_F7kMzD",
+        "hotspot_EwaRDR",
+        "hotspot_FWWk9L",
+        "hotspot_848Aed",
+        "hotspot_gWJQ3i",
+        "hotspot_nqiBTF"
+      ],
+      "name": "Product Hotspot",
+      "settings": {
+        "btn_text": "Add to cart",
+        "btn_color": "#000000",
+        "btn_text_color": "#ffffff",
+        "btn_hover_color": "#fff544",
+        "btn_text_color_h": "#000000",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "banner_custom_V4KiYT",
+    "product_hotspot_UhgLmX"
+  ]
+}

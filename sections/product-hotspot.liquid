@@ -1,0 +1,545 @@
+<style>
+.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .section-{{ section.id }}-padding img{max-width:100%;}
+  .section-{{ section.id }}-padding .section-header{padding:0 0 25px;}
+  .section-{{ section.id }}-padding .section-header h2{margin:0; padding:0; font-weight: 400;font-family: "Lustria", serif;font-size: 36px;letter-spacing: 0px;}
+
+ .section-{{ section.id }}-padding .hotspot-wrapper {
+    display: flex;
+    flex-flow: wrap;
+    gap: 15px;
+}
+.section-{{ section.id }}-padding  .hotspot-wrapper-item{  position: relative; width: calc(33.33% - 15px* 2 / 3);}
+
+.section-{{ section.id }}-padding .hotspot-featured-image img {  width: 100%;  display: block;}
+
+.section-{{ section.id }}-padding .hotspot-point {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: #F8F8F8E5;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  cursor: pointer;
+}
+
+/* Popup */
+.section-{{ section.id }}-padding .hotspot-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.section-{{ section.id }}-padding .open_popup{  display: flex;}
+
+.section-{{ section.id }}-padding .hotspot-popup-max {
+  background: #fff;
+  padding: 30px 20px;
+  max-width: 331px;
+  width: 100%;
+  position: relative; 
+  box-shadow: 0px 2px 4px 0px #00000033;
+
+}
+
+.section-{{ section.id }}-padding .hotspot-popup-inner{display:flex; gap:10px;}
+.section-{{ section.id }}-padding .hotspot-popup-left {width:120px;}
+.section-{{ section.id }}-padding .hotspot-popup-right {width:calc(100% - 120px);}
+.section-{{ section.id }}-padding .hotspot-popup-left img {    height: 140px;    object-fit: cover;     display: block;   width: 100%;}
+.section-{{ section.id }}-padding .hotspot-popup-right .pro_title {    font-size: 16px;    letter-spacing: 0;    font-weight: 300; margin:0;     padding: 5px 0 14px;}
+.section-{{ section.id }}-padding .hotspot-price{font-family: "Lustria", serif;   font-weight: 400;  font-style: normal; letter-spacing: 0; padding:0 0 8px;  }
+.section-{{ section.id }}-padding .hotspot-description{font-weight: 300; font-size: 14px;letter-spacing: -0.14px; line-height:1.1; }
+.section-{{ section.id }}-padding .hotspot-description p{margin:0; padding:0;}
+.section-{{ section.id }}-padding .close-btn {  position: absolute;  top: 10px;  right: 15px;  cursor: pointer;  }
+
+/* Button */
+.section-{{ section.id }}-padding .btn-custom {
+  position: relative;
+  overflow: hidden;
+  padding: 13px 32px;
+  background: {{ section.settings.btn_color }};
+  text-decoration: none;
+  color: {{ section.settings.btn_text_color  }};
+  font-weight: 400;
+  display: inline-block;
+  transition: color 0.3s ease;  width: 100%;
+  text-transform: uppercase;
+  border:0;
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  cursor: pointer;     font-size: 16px;
+}
+
+.section-{{ section.id }}-padding .btn-custom::before {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: {{ section.settings.btn_hover_color }};
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.section-{{ section.id }}-padding .btn-custom:hover::before {  left: 0;}
+.section-{{ section.id }}-padding .btn-custom span {  position: relative;  z-index: 1;  display: flex;    align-items: center;    gap: 10px;    justify-content: center;}
+.section-{{ section.id }}-padding .btn-custom:hover {  color: {{ section.settings.btn_text_color_h }}; box-shadow: 0px 2px 4px 0px #00000033;}
+.section-{{ section.id }}-padding .btn-custom path{fill: {{ section.settings.btn_text_color  }};}
+.section-{{ section.id }}-padding .btn-custom:hover path{ fill: {{ section.settings.btn_text_color_h  }};}
+
+ .section-{{ section.id }}-padding .hotspot-popup-bottom-space {    padding: 0 0 35px;}
+ .section-{{ section.id }}-padding .variants-label {
+    display: block;
+    margin: 0 0 5px;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0;
+        line-height: normal;
+    
+  }
+.section-{{ section.id }}-padding .variants-part{margin:10px 0;}
+  /* COLOR SELECTOR */
+  .section-{{ section.id }}-padding .color-group {
+    display: flex;
+    border: 1px solid #000;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .section-{{ section.id }}-padding .color-option {
+    flex: 1;
+    padding:3px 16px;
+    min-height: 40px;
+    cursor: pointer;
+    position: relative;
+    background: #fff;
+    transition: color 0.3s; 
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    font-size:18px;
+    font-weight: 400;
+letter-spacing: -0.36px;
+   text-transform: capitalize;
+
+  }
+.section-{{ section.id }}-padding .color-option-bg {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+}
+
+.section-{{ section.id }}-padding .color-option span {
+  position: relative;
+  z-index: 2;
+}
+.section-{{ section.id }}-padding .color-option.active {
+    color: #fff;
+  }
+
+  /* sliding fill */
+
+.section-{{ section.id }}-padding .color-option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: -1;
+
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.section-{{ section.id }}-padding .color-option.active::before {
+  transform: scaleX(1);
+}
+
+
+
+  /* DROPDOWN */
+  .section-{{ section.id }}-padding .dropdown {
+    width: 100%;
+    position: relative;
+  }
+
+  .section-{{ section.id }}-padding .dropdown-header {
+    border: 1px solid #000;
+    padding-left: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+        align-items: center;
+  }
+.section-{{ section.id }}-padding .selectedSize{font-size: 16px;letter-spacing: -0.32px;}
+.section-{{ section.id }}-padding .dropdown-arrow {
+    border-left: #000 solid 1px;
+    width: 54px;
+    text-align: center;
+    padding: 6px;
+    height: 40px;
+}
+.section-{{ section.id }}-padding .dropdown-arrow svg{  transition: transform 0.3s ease;}
+.section-{{ section.id }}-padding .dropdown-header.active .dropdown-arrow svg {    transform: rotate(180deg);}
+ .section-{{ section.id }}-padding .dropdown-list {
+    border: 1px solid #000;
+    border-top: none;
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    z-index: 10;
+    text-align:center;
+   letter-spacing: -0.32px;
+     font-size:16px;
+     max-height: 110px;
+    overflow: auto;
+  }
+
+  .section-{{ section.id }}-padding .dropdown-list.open {
+    display: block;
+  }
+
+  .section-{{ section.id }}-padding .dropdown-item {
+    padding: 5px 5px;
+    cursor: pointer;
+  }
+
+  .section-{{ section.id }}-padding .dropdown-item:hover {
+    background: #000; color:#fff;
+  }
+
+@media(max-width:767px) {
+    .section-{{ section.id }}-padding .section-header{padding:0 0 20px;}
+  .section-{{ section.id }}-padding .section-header h2{font-size: 25px; text-align:center;}
+.section-{{ section.id }}-padding .hotspot-description {    font-size: 12px;    line-height: 1.3;}
+.section-{{ section.id }}-padding .hotspot-wrapper {    gap: 5px;}
+.section-{{ section.id }}-padding .hotspot-wrapper-item{  width: calc(50% - 5px / 2); }
+.section-{{ section.id }}-padding .hotspot-point {    width: 16px;    height: 16px;    }
+.section-{{ section.id }}-padding .hotspot-point svg{width:7px; height:7px;}
+.section-{{ section.id }}-padding .hotspot-popup-max {max-width:311px;}
+
+}
+
+ {% for block in section.blocks %}
+  .vsb_{{ block.id }} .hotspot-point{top: {{ block.settings.top }}%; left: {{ block.settings.left }}%;}
+
+  @media(max-width:767px) {
+      .vsb_{{ block.id }} .hotspot-point{top: {{ block.settings.top_m }}%; left: {{ block.settings.left_m }}%;}
+  }
+ {% endfor %} 
+ </style>
+<section class="section-{{ section.id }}-padding hotspot-section">
+  <div class="page-width">
+  {% if section.settings.heading != blank %}  <div class="section-header">  <h2>{{ section.settings.heading }}</h2>   </div> {% endif %}
+
+    <div class="hotspot-wrapper">
+      {% for block in section.blocks %}
+        {% assign product = all_products[block.settings.product] %}
+<div class="hotspot-wrapper-item vsb_{{ block.id }}">
+     <div class="hotspot-featured-image"> <img src="{{ product.featured_image | image_url: width: 800 }}"></div>
+        <div 
+          class="hotspot-point"
+         
+          data-product='{{ product | json | replace: "'", "&apos;" }}'
+        >
+          {% render 'plus-icon' %}
+        </div>
+   <!-- ✅ POPUP CODE -->
+    <div class="hotspot-popup" id="hotspotPopup">
+       <div class="hotspot-popup-max">
+        <div class="close-btn">{% render 'close-icon-popup' %}</div>
+         <div class="hotspot-popup-inner">
+             <div class="hotspot-popup-left"><img src="{{ product.featured_image | image_url: width: 400 }}"></div>
+             <div class="hotspot-popup-right">
+              <h2 class="pro_title">{{ product.title }}</h2>
+              <div class="hotspot-price">{{ product.price | money_with_currency }}</div>
+              {% if product.description != blank %}  <div class="hotspot-description"> {{ product.description }} </div> {% endif %}
+             </div>
+         </div>
+            
+         
+          <div class="hotspot-popup-bottom">
+              <div class="hotspot-popup-bottom-space">
+             <!-- Color -->
+            <div class="variants-part variants-part-color">
+            <label class="variants-label">Color</label>
+            <div class="color-group" id="colorGroup">
+            <div class="color-option"><div class="color-option-bg" style="background:#0D499F">&nbsp;</div><span>blue</span></div>
+            <div class="color-option"><div class="color-option-bg" style="background:#B20F36">&nbsp;</div><span>Red</span></div>
+            </div>
+            </div>
+
+          <!-- SIZE -->
+          <div class="variants-part variants-part-size">
+            <label class="variants-label">Size</label>
+            <div class="dropdown" >
+              <div class="dropdown-header">
+                <span class="selectedSize">Choose your size</span>
+                <span class="dropdown-arrow">{% render 'arrow-down-icon' %}</span>
+              </div>
+              <div class="dropdown-list">
+                <div class="dropdown-item">XS</div>
+                <div class="dropdown-item">S</div>
+                <div class="dropdown-item">M</div>
+                <div class="dropdown-item">L</div>
+              </div>
+            </div>
+          </div>
+          </div>
+           {% if section.settings.btn_text != blank %} <button class="btn-custom"> <span>{{ section.settings.btn_text }} {% render 'arrow-right' %}</span></button> {% endif %}
+          </div>
+
+         </div>
+    </div>
+  </div>
+
+      {% endfor %}
+    </div>
+
+ 
+
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.querySelectorAll(".hotspot-wrapper-item").forEach(function(item) {
+
+    const point = item.querySelector(".hotspot-point");
+    const popup = item.querySelector(".hotspot-popup");
+    const closeBtn = item.querySelector(".close-btn");
+
+    // 👉 Open popup
+    point.addEventListener("click", function() {
+      popup.classList.add("open_popup");
+    });
+
+    // 👉 Close popup
+    closeBtn.addEventListener("click", function() {
+      popup.classList.remove("open_popup");
+    });
+
+  });
+
+});
+
+
+// COLOR SELECT
+  const colorOptions = document.querySelectorAll(".color-option");
+
+  colorOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      colorOptions.forEach(o => o.classList.remove("active"));
+      option.classList.add("active");
+    });
+  });
+
+  // DROPDOWN
+
+const dropdowns = document.querySelectorAll(".dropdown");
+
+dropdowns.forEach(dropdown => {
+  const header = dropdown.querySelector(".dropdown-header");
+  const list = dropdown.querySelector(".dropdown-list");
+  const items = dropdown.querySelectorAll(".dropdown-item");
+ const selected = dropdown.querySelector(".selectedSize");
+
+  header.addEventListener("click", () => {
+    list.classList.toggle("open");
+    header.classList.toggle("active"); 
+  });
+
+  items.forEach(item => {
+    item.addEventListener("click", () => {
+      selected.textContent = item.textContent;
+      list.classList.remove("open");
+        header.classList.remove("active"); 
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target)) {
+      list.classList.remove("open");
+      header.classList.remove("active")
+    }
+  });
+});
+
+
+  </script>
+
+
+{% schema %}
+{
+  "name": "Product Hotspot",
+    "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+      {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Tisso vison in the wild"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "CHOOSE GIFT"
+    },
+      {
+      "type": "color",
+      "id": "btn_color",
+      "label": "Button Background",
+      "default": "#f4e933"
+    },
+       {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button Text Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Hover Effect"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_color",
+      "label": "Button Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color_h",
+      "label": "Button Text Color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Hotspot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
+        },
+        {
+        "type": "header",
+        "content": "Position Desktop"
+        },
+        {
+          "type": "range",
+          "id": "top",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Top Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Left Position",
+          "default": 50
+        },
+        {
+        "type": "header",
+        "content": "Position Mobile"
+        },
+        {
+          "type": "range",
+          "id": "top_m",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Top Position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "left_m",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Left Position",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Hotspot"
+    }
+  ]
+}
+{% endschema %}
