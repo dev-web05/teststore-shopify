@@ -544,6 +544,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Dispatch custom event for other cart handlers
       document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
+      window.location.href = '/cart';
     })
     .catch(error => {
       console.error('Error adding to cart:', error);
